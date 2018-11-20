@@ -1,4 +1,10 @@
 
+# Comment:
+
+I miss diagrams. I think this code will be unreadable when solving real problems.
+
+
+
 # References:
 
 - https://hackerfall.com/story/challenging-clojure-in-common-lisp#day2
