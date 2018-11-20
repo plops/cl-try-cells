@@ -1,0 +1,4 @@
+
+# References:
+
+- https://hackerfall.com/story/challenging-clojure-in-common-lisp#day2
