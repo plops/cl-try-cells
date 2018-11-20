@@ -67,7 +67,7 @@
      (mycake (make-instance 'cake)))
     (message)
   (match message
-	 ((list :add ingredient) when (member ingredients (batter
+	 ((list :add ingredient) when (member ingredient (batter
 							   mycake))
 	  (when (batter-p mycake)
 	    (format t "Batter complete. No need for ~a.~%"
@@ -101,3 +101,14 @@
 	      (t (format t "Don't know ~a.~%" todo)))))
 	 (_ (format t "Recipe error.~%")))
   next)
+
+
+(defvar *mybaker* (baker))
+
+(send *mybaker* '(:add :flour))
+
+(send *mybaker* '(:act :knead))
+
+(send *mybaker* '(:add :milk))
+
+(send *mybaker* '(:add :eggs))
