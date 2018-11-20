@@ -61,3 +61,43 @@
 (defobserver dones ((self cake))
   (format t "Completed tasks are now ~a." new-value))
 
+(defactor baker
+    ((*all-ingredients-fu* (construct-accumulator))
+     (*all-dones-fu* (construct-accumulator))
+     (mycake (make-instance 'cake)))
+    (message)
+  (match message
+	 ((list :add ingredient) when (member ingredients (batter
+							   mycake))
+	  (when (batter-p mycake)
+	    (format t "Batter complete. No need for ~a.~%"
+		    ingredient))
+	  (if (member ingredient (ingredients mycake))
+	      (format t "Already have ~a in batter.~%" ingredient)
+	      (setf (mixin mycake) ingredient)))
+	 ((list :add ingredient) when (and (member ingredient
+						   (decoration
+						    mycake))
+					   (member :bake (dones
+							  mycake)))
+	  (if (member ingredient (ingredients mycake))
+	      (format t "Already have ~a in cake.~%" ingredient)
+	      (setf (mixin mycake) ingredient
+		    (action mycake) :decorate)))
+	 ((list :act todo) when (member todo (todos mycake))
+	  (when (alldone-p mycake)
+	    (format t "Cake finished. Decline to do ~a.~%" todo))
+	  (if (member todo (dones mycake))
+	    (format t "Already did ~a.~%" todo)
+	    (ecase todo
+	      (:bake (if (member :knead (dones mycake))
+			 (setf (action mycake) todo)
+			 (format t "Knead batter first. Can't do ~a.~%"
+				 todo)))
+	      (:knead (if (batter-p mycake)
+			  (setf (action mycake) todo)
+			  (format t "Batter not ready. Knead dough!
+    Not ~a.~%" todo)))
+	      (t (format t "Don't know ~a.~%" todo)))))
+	 (_ (format t "Recipe error.~%")))
+  next)
